@@ -5,6 +5,12 @@ spring:
   profiles:
     active: local
 
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQLDialect
+    show-sql: false
+
 server:
   port: 8080
 

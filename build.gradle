@@ -24,6 +24,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     implementation 'com.h2database:h2'
     implementation 'org.springframework.boot:spring-boot-h2console'
+    implementation platform('io.awspring.cloud:spring-cloud-aws-dependencies:4.0.0-RC1')
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-parameter-store'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'

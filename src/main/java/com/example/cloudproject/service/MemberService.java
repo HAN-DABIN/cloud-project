@@ -47,4 +47,22 @@ public class MemberService {
                 member.getMbti()
         );
     }
+
+    @Transactional
+    public void updateProfileImage(Long memberId, String key) {
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException("해당 팀원이 없습니다."));
+
+        member.updateProfileImageKey(key);
+    }
+
+    @Transactional(readOnly = true)
+    public String getProfileImageKey(Long memberId) {
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException("해당 팀원이 없습니다."));
+
+        return member.getProfileImageKey();
+    }
 }

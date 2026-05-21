@@ -1,0 +1,41 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  docker-build-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: GitHub 코드 가져오기
+        uses: actions/checkout@v4
+
+      - name: AWS 자격 증명 설정
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Amazon ECR 로그인
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Docker 이미지 빌드
+        run: |
+          docker build -t cloud-project .
+
+      - name: Docker 이미지 태그
+        run: |
+          docker tag cloud-project:latest \
+          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
+
+      - name: Docker 이미지 Push
+        run: |
+          docker push \
+          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest

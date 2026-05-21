@@ -14,6 +14,12 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: false
 
+  spring:
+    cloud:
+      aws:
+        s3:
+          bucket: cloud-project-211535858911-files
+
 management:
   endpoint:
     health:

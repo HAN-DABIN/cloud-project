@@ -5,11 +5,23 @@ spring:
   profiles:
     active: local
 
+  config:
+    import: aws-parameterstore:/cloud-project/prod/
+
   jpa:
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQLDialect
-    show-sql: false
+
+  cloud:
+    aws:
+      region:
+        static: ap-northeast-2
+      s3:
+        bucket: ${S3_BUCKET}
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
 
 server:
   port: 8080

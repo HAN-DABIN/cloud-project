@@ -14,8 +14,4 @@ spring:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.H2Dialect
-
-  cloud:
-    aws:
-      s3:
-        bucket: cloud-project-211535858911-files
+    show-sql: true

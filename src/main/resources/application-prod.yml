@@ -14,7 +14,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: false
 
-  cloud:
+   cloud:
     aws:
       region:
         static: ap-northeast-2

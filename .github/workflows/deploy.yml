@@ -36,18 +36,25 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Amazon ECR 로그인
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Docker 이미지 빌드
-        run: |
-          docker build -t cloud-project .
+      # ── ARM64 크로스 빌드를 위한 QEMU 및 Buildx 설정 (추가됨) ──
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
-      - name: Docker 이미지 태그
-        run: |
-          docker tag cloud-project:latest \
-          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Docker 이미지 Push
-        run: |
-          docker push \
-          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
+      # ── 하나의 액션으로 빌드부터 ECR Push까지 통합 처리 (변경됨) ──
+      - name: Docker 이미지 빌드 및 Push (ARM64 대상)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile  # Dockerfile 경로가 다르면 수정하세요.
+          push: true
+          platforms: linux/arm64  # 👈 t4g 인스턴스에 호환되도록 지정하는 핵심 옵션
+          tags: |
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

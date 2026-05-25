@@ -31,3 +31,11 @@ http://3.39.227.181:8080/actuator/info
 ### 2. URL 만료 시간
 
 ![img_4.png](img_4.png)
+
+## Lv .4
+
+### 1. Github Actions 성공 이미지
+![img_5.png](img_5.png)
+
+### 2. EC2 터미널 이미지
+![img_6.png](img_6.png)

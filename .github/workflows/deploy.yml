@@ -14,47 +14,44 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: GitHub 코드 가져오기
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Java 17 설정
+      - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'corretto'
 
-      - name: gradlew 실행 권한 부여
+      - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: JAR 빌드
+      - name: Build JAR
         run: ./gradlew bootJar
 
-      - name: AWS 자격 증명 설정
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Amazon ECR 로그인
+      - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      # ── ARM64 크로스 빌드를 위한 QEMU 및 Buildx 설정 (추가됨) ──
-      - name: Set up QEMU
+      - name: Set up QEMU (for ARM build)
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # ── 하나의 액션으로 빌드부터 ECR Push까지 통합 처리 (변경됨) ──
-      - name: Docker 이미지 빌드 및 Push (ARM64 대상)
+      - name: Build and push Docker image (ARM64)
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile  # Dockerfile 경로가 다르면 수정하세요.
+          file: ./Dockerfile
           push: true
-          platforms: linux/arm64  # 👈 t4g 인스턴스에 호환되도록 지정하는 핵심 옵션
-          tags: |
-            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
+          platforms: linux/arm64
+          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max

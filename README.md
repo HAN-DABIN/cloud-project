@@ -39,3 +39,22 @@ http://3.39.227.181:8080/actuator/info
 
 ### 2. EC2 터미널 이미지
 ![img_6.png](img_6.png)
+
+## Lv. 5
+
+### 1. HTTPS 적용된 도메인 URL
+
+https://dabin.click/
+
+### 2. Target Group(대상 그룹) 이미지
+
+![img_7.png](img_7.png)
+
+## Lv. 6
+
+CloudFront 이미지 URL
+
+https://d27bc5kdje6z19.cloudfront.net/uploads/test.jpeg
+
+![img_8.png](img_8.png)
+

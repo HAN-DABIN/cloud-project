@@ -14,22 +14,22 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: false
 
-   cloud:
-    aws:
-      region:
-        static: ap-northeast-2
-      s3:
-        bucket: cloud-project-211535858911-files
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: cloud-project-211535858911-files
 
 management:
-  endpoint:
-    health:
-      show-details: never
-
   endpoints:
     web:
       exposure:
         include: health,info
+
+  endpoint:
+    health:
+      show-details: never
 
   info:
     env:
